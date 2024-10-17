@@ -15,7 +15,7 @@ Clone the repository:
 
 bash
 Copy code
-git clone https://github.com/yourusername/project-management-report.git
+git clone [https://github.com/yourusername/project-management-report.git](https://github.com/Yash150406/project-management)
 cd project-management-report
 Compile the program:
 
