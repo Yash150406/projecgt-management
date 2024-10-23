@@ -1,112 +1,61 @@
 #include <stdio.h>
-
-int main() {
-    int status, total = 0, count = 0, i, task, subYear, subMonth, subDay, deadlineYear, deadlineMonth, deadlineDay, invalid = 0;
-    char title[50];
-    float deadlinetasks, completetasks;
-    char name[50];
-    float cost, totalcost = 0,loss,profit;
-
-    printf("Enter following data to display a project management report for the 2024-2025\n");
-    printf("THE PROJECT REPORT IS AS FOLLOWS: \n");
-    printf("Enter total number of tasks : \n");
-    scanf("%d", &i);
-
-    for (task = 1; task <= i; task++) {
-        printf("TASK NUMBER : %d\n", task);
-        getchar();
-       
-        printf("Enter title of the task : \n");
-        scanf(" %s", title);
-        getchar();
-
-        printf("Enter name of allocated person for the task: \n");
-        scanf("%s", name);
-       
-        printf("TITLE OF THE TASK : %s\n", title);
-        printf("NAME OF ALLOCATED PERSON FOR THE TASK : %s\n", name);
-
-        printf("Enter status of task (1=complete, 0=incomplete) : \n");
-        scanf("%d", &status);
-
-        if (status == 1) {
-            printf("STATUS OF THE TASK : COMPLETE \n");
-            total++;
-
-            printf("Enter date of submission of the task (DD MM YYYY) : \n");
-            scanf("%d %d %d", &subDay, &subMonth, &subYear);
-            printf("Enter deadline date (DD MM YYYY) : \n");
-            scanf("%d %d %d", &deadlineDay, &deadlineMonth, &deadlineYear);
-            printf("Enter cost of the task : \n");
-            scanf("%f", &profit);
-            cost += profit;
-
-            if (subYear <= 2025 && subYear >= 2024 && deadlineYear <= 2025 && deadlineYear >= 2024 &&
-                subMonth <= 12 && subMonth >= 1 && deadlineMonth <= 12 && deadlineMonth >= 1 &&
-                subDay >= 1 && subDay <= 31 && deadlineDay >= 1 && deadlineDay <= 31) {
-
-                if (subYear < deadlineYear ||
-                    (subYear == deadlineYear && subMonth < deadlineMonth) ||
-                    (subYear == deadlineYear && subMonth == deadlineMonth && subDay < deadlineDay)) {
-                    printf("THE DEADLINE HAS BEEN MET BEFORE TIME\n");
-                    count++;
-                } else if (subYear == deadlineYear && subMonth == deadlineMonth && subDay == deadlineDay) {
-                    printf("THE DEADLINE HAS BEEN MET ON TIME\n");
-                    count++;
-                } else {
-                    printf("THE DEADLINE HAS NOT BEEN MET\n");
-                }
-            } else {
-                printf("INVALID INPUT\n");
-                invalid++;
-            }
-        } else if (status == 0) {
-            printf("STATUS OF THE TASK : INCOMPLETE\n");
-            printf("Enter cost of the task : \n");
-            scanf("%f", &loss);
-            cost += loss;
-           
-        } else {
-            printf("INVALID INPUT\n");
-            invalid++;
-            break;
-        }
+#include <string.h>
+#include <ctype.h>
+#define MAX_LEN 100
+// This is function to check password strength
+int isStrongPassword(const char *password) {
+    int hasUpper = 0, hasLower = 0, hasDigit = 0, hasSpecial = 0;
+    for (int i = 0; password[i] != '\0'; i++)
+    {
+        if (isupper(password[i])) hasUpper = 1;
+        else if (islower(password[i])) hasLower = 1;
+        else if (isdigit(password[i])) hasDigit = 1;
+        else if (ispunct(password[i])) hasSpecial = 1;
     }
-
-    if (invalid > 0) {
-        printf("PROJECT REPORT CANNOT BE GENERATED DUE TO INVALID INPUT\n");
-    } else {
-        printf("TOTAL NUMBER OF COMPLETE TASKS : %d \n", total);
-        printf("TOTAL NUMBER OF TASKS COMPLETED ON OR BEFORE DEADLINE : %d \n", count);
-        completetasks = (total * 100) / i;
-        printf("PERCENTAGE OF TASKS COMPLETED IN THE PROJECT : %f \n", completetasks);
-        deadlinetasks = (count * 100) / i;
-        printf("PERCENTAGE OF TASKS COMPLETED ON OR BEFORE DEADLINE : %f \n", deadlinetasks);
-        totalcost=profit+loss;
-        printf("TOTAL COST OF THE PROJECT : %.2f\n", totalcost);
-        printf("TOTAL PROFIT OF PROJECT : %f \n",profit);
-        printf("TOTAL LOSS OF PROJECT : %f \n",loss);
-        if (completetasks >= 95.00 && deadlinetasks >= 95.00) {
-            printf("PROJECT IS PERFORMED WITH OUTSTANDING EFFICIENCY\n");
-        } else if (completetasks >= 90.00 && deadlinetasks >= 90.00) {
-            printf("PROJECT IS PERFORMED WITH EXCELLENT EFFICIENCY\n");
-        } else if (completetasks >= 90.00 && deadlinetasks >= 80.00) {
-            printf("PROJECT IS PERFORMED WITH GREAT EFFICIENCY BUT DEADLINES SHOULD BE MET WITHIN TIME\n");
-        } else if (completetasks >= 80.00 && deadlinetasks >= 80.00) {
-            printf("PROJECT IS PERFORMED WITH GOOD EFFICIENCY\n");
-        } else if (completetasks >= 75.00 && deadlinetasks >= 75.00) {
-            printf("THE PROJECT IS PERFORMED WITH SATISFACTORY EFFICIENCY BUT IT SHOULD BE IMPROVED\n");
-            printf("TOTAL LOSS OF %f HAS OCCURRED \n",loss);
-        } else {
-            printf("THE PROJECT IS NOT PERFORMED AND THE MEMBERS WILL BE PLACED UNDER REVIEW FOR DISSATISFACTORY RESPONSE\n");
-            printf("TOTAL LOSS OF %f HAS OCCURRED \n",loss);
-        }
-        printf("***********************************************\n");
-        printf("                PROJECT COSTS                \n");
-        printf("TOTAL COST OF THE PROJECT : %.2f\n", totalcost);
-        printf("TOTAL PROFIT OF PROJECT : %f \n",profit);
-        printf("TOTAL LOSS OF PROJECT : %f \n",loss);
+    return hasUpper && hasLower && hasDigit && hasSpecial;
+}
+int main()
+{
+    char password[MAX_LEN];
+    char confirmPassword[MAX_LEN];
+    char savedPassword[MAX_LEN];
+    char message[MAX_LEN * 2];
+    char successPrefix[] = "Your password has been set successfully: ";
+    printf("PASSWORD MANAGEMENT SETTINGS\n");
+    printf("Set your password (minimum 8 characters, must include upper, lower, digit, and special character): ");
+    scanf("%99s", password); // Reads up to 99 characters
+    // Checks if the password is strong
+    if (strlen(password) < 8)
+    {
+        printf("Password must be at least 8 characters long.\n");
+        return 1;
     }
-
+    if (!isStrongPassword(password))
+    {
+        printf("Password must include:\n");
+        printf("- One uppercase letter\n");
+        printf("- One lowercase letter\n");
+        printf("- One digit\n");
+        printf("- One special character\n");
+        return 1;
+    }
+    printf("Confirm your password: ");
+    scanf("%99s", confirmPassword); // Reads up to 99 characters
+    // Compares the passwords
+    if (strcmp(password, confirmPassword) == 0)
+    {
+        printf("Passwords match!\n");
+        // Copies password to another string
+        strcpy(savedPassword, password);
+        // Finds the length of the password
+        size_t passwordLength = strlen(savedPassword);
+        printf("Your password length is: %lu\n", passwordLength);
+        // Concatenates a success message with the saved password
+        snprintf(message, sizeof(message), "%s%s", successPrefix, savedPassword);
+        printf("%s\n", message);
+    } else
+    {
+        printf("Passwords do not match. Please try again.\n");
+    }
     return 0;
 }
